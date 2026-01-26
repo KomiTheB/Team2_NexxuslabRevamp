@@ -244,7 +244,9 @@ function initPortfolioSlider(){
         const rect = sample.getBoundingClientRect();
         const slideWidth = rect.width || slider.clientWidth || 800;
         const ideal = (slideWidth / 2) / Math.tan(Math.PI / slides.length);
-        radius = Math.round(Math.max(360, Math.min(980, ideal + 90)));
+        // With more slides, we need a larger radius to prevent overlap.
+        const maxRadius = Math.max(980, Math.min(1800, slides.length * 160));
+        radius = Math.round(Math.max(360, Math.min(maxRadius, ideal + 90)));
 
         slider.style.setProperty('--portfolio-radius', `${radius}px`);
 

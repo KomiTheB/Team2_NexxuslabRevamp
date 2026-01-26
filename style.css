@@ -1021,6 +1021,9 @@ header .menu.active {
 
 .portfolio-slider {
     position: relative;
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
     border-radius: 18px;
     border: none;
     background: transparent;
@@ -1034,6 +1037,7 @@ header .menu.active {
 
 .portfolio-viewport {
     overflow: hidden;
+    width: 100%;
     perspective: 1200px;
     perspective-origin: 50% 50%;
     height: var(--portfolio-height);
@@ -1064,7 +1068,7 @@ header .menu.active {
     -webkit-backface-visibility: hidden;
     --angle: 0deg;
     transform: translate(-50%, -50%) rotateY(var(--angle)) translateZ(var(--portfolio-radius));
-    opacity: 1;
+    opacity: 0.55;
     pointer-events: none;
     transition:
         opacity 450ms ease,
@@ -1083,7 +1087,7 @@ header .menu.active {
 
 .portfolio-slide img {
     width: 100%;
-    height: var(--portfolio-height);
+    height: 100%;
     object-fit: contain;
     object-position: center;
     display: block;
@@ -1799,8 +1803,7 @@ header .menu.active {
         --portfolio-depth: 70px;
     }
 
-    .portfolio-track,
-    .portfolio-slide img {
+    .portfolio-track {
         height: var(--portfolio-height);
     }
 
