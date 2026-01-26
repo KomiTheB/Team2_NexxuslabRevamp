@@ -6,6 +6,7 @@
         <link rel="stylesheet" href="./style.css" />
 
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        <link rel="stylesheet" href="https://assets.calendly.com/assets/external/widget.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css"
          integrity="sha384-b6lVK+yci+bfDmaY1u0zE8YYJt0TZxLEAFyYSLHId4xoVvsrQu3INevFKo+Xir8e" crossorigin="anonymous">
 
@@ -20,21 +21,21 @@
     <!-- Header -->
         <header>
            <!--<span class="year">2018-2023</span>--> 
-            <a href="/" class="logo"><img src="./images/LOGO NexxusLab.png" alt="logo" /></a>
-            <a href="#" class="menu" onclick="toggleMenu();"></a>
+            <a href="#home" class="logo"><img src="./images/LOGO NexxusLab.png" alt="Nexxus Lab" /></a>
+            <a href="#" class="menu" aria-label="Toggle navigation" onclick="toggleMenu();"></a>
             
         </header>
 
     <!-- Navigation --> 
-        <div class="banner">
+        <section id="home" class="banner">
             
             <ul class="nav">
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Services</a></li>
-                <li><a href="#">Portfolio</a></li>
-                <li><a href="#">Principle</a></li>
-                <li><a href="#">Team</a></li>
-                <li><a href="#">Contact</a></li>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#portfolio">Portfolio</a></li>
+                <li><a href="#principle">Principle</a></li>
+                <li><a href="#team">Team</a></li>
+                <li><a href="#contact">Contact</a></li>
             </ul>
 
             <div class="bg-video-list">
@@ -59,7 +60,7 @@
                 <p>
                 We transform visions into experiences with our Mock-ups &amp; Prototypes services. Our designers create detailed, interactive prototypes as blueprints for your projects. Each prototype guides development with clarity and precision.
                 </p>
-                <a href="#">Enquire</a>
+                <a href="#contact">Enquire</a>
             </div>
             
             <div class="screen screen-logo">
@@ -100,7 +101,219 @@
 
             </div>
 
-        </div>
+        </section>
+
+        <main>
+            <section id="services" class="page-section">
+                <div class="section-inner">
+                    <h2 class="section-title">Services</h2>
+                    <p class="section-subtitle">End-to-end solutions for product, platform, and growth.</p>
+
+                    <div class="card-grid">
+                        <article class="info-card">
+                            <h3>Mock-ups &amp; Prototypes</h3>
+                            <p>Interactive prototypes that align teams and accelerate development.</p>
+                        </article>
+                        <article class="info-card">
+                            <h3>Software Development</h3>
+                            <p>Web apps, hybrid and native experiences built for scale.</p>
+                        </article>
+                        <article class="info-card">
+                            <h3>Network Security</h3>
+                            <p>Risk reduction with modern security practices and monitoring.</p>
+                        </article>
+                        <article class="info-card">
+                            <h3>IT Support Training</h3>
+                            <p>Practical, job-ready training and customer support excellence.</p>
+                        </article>
+                        <article class="info-card">
+                            <h3>Automata Development</h3>
+                            <p>Automation that streamlines operations and boosts reliability.</p>
+                        </article>
+                        <article class="info-card">
+                            <h3>AI Marketing Services</h3>
+                            <p>Data-driven campaigns, content workflows, and measurable ROI.</p>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section id="portfolio" class="page-section">
+                <div class="section-inner">
+                    <h2 class="section-title">Portfolio</h2>
+                    <p class="section-subtitle">A snapshot of recent work and experiments.</p>
+
+                    <div class="portfolio-slider" data-autoplay="true" data-interval="4500" aria-label="Portfolio slideshow" tabindex="0">
+                        <button class="portfolio-nav prev" type="button" aria-label="Previous slide">
+                            <i class="bi bi-chevron-left" aria-hidden="true"></i>
+                        </button>
+                        <button class="portfolio-nav next" type="button" aria-label="Next slide">
+                            <i class="bi bi-chevron-right" aria-hidden="true"></i>
+                        </button>
+
+                        <div class="portfolio-viewport">
+                            <div class="portfolio-track">
+                                <figure class="portfolio-slide">
+                                    <a class="portfolio-link" href="https://sites.google.com/view/mychapters/home?authuser=0" target="_blank" rel="noopener noreferrer">
+                                        <img src="./assets/Portfolio1.png" alt="Fundraising for Jedd" loading="lazy" />
+                                    </a>
+                                </figure>
+                                <figure class="portfolio-slide">
+                                    <a class="portfolio-link" href="https://sites.google.com/view/scaleui/home" target="_blank" rel="noopener noreferrer">
+                                        <img src="./assets/Portfolio2.png" alt="Scale UI" loading="lazy" />
+                                    </a>
+                                </figure>
+                                <figure class="portfolio-slide">
+                                    <a class="portfolio-link" href="https://sites.google.com/view/top100ai/home" target="_blank" rel="noopener noreferrer">
+                                        <img src="./assets/Portfolio3.png" alt="Top 100 AI" loading="lazy" />
+                                    </a>
+                                </figure>
+                                <figure class="portfolio-slide">
+                                    <a class="portfolio-link" href="https://sites.google.com/view/bonnie-factor/home" target="_blank" rel="noopener noreferrer">
+                                        <img src="./assets/Portfolio4.png" alt="Bonnie Factor" loading="lazy" />
+                                    </a>
+                                </figure>
+                                <figure class="portfolio-slide">
+                                    <a class="portfolio-link" href="https://tapstaffingsolutions.com/#our-services" target="_blank" rel="noopener noreferrer">
+                                        <img src="./assets/Portfolio5.png" alt="TAP Staffing Solutions" loading="lazy" />
+                                    </a>
+                                </figure>
+                                <figure class="portfolio-slide">
+                                    <a class="portfolio-link" href="https://sites.google.com/view/ai-defendbot/home" target="_blank" rel="noopener noreferrer">
+                                        <img src="./assets/Portfolio6.png" alt="AI DefendBot" loading="lazy" />
+                                    </a>
+                                </figure>
+                                <figure class="portfolio-slide">
+                                    <a class="portfolio-link" href="https://sites.google.com/view/mcsuppliesph/home" target="_blank" rel="noopener noreferrer">
+                                        <img src="./assets/Portfolio7.png" alt="MC Supplies PH" loading="lazy" />
+                                    </a>
+                                </figure>
+                                <figure class="portfolio-slide">
+                                    <a class="portfolio-link" href="https://sites.google.com/view/mychapters/home?authuser=0" target="_blank" rel="noopener noreferrer">
+                                        <img src="./assets/Portfolio8.png" alt="MyChapters" loading="lazy" />
+                                    </a>
+                                </figure>
+                            </div>
+                        </div>
+
+                        <div class="portfolio-dots" aria-hidden="false"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="principle" class="page-section">
+                <div class="section-inner">
+                    <h2 class="section-title">Principles of <span class="accent">Nexxus Lab</span></h2>
+
+                    <div class="card-grid">
+                        <article class="info-card principle-card">
+                            <div class="principle-icon" aria-hidden="true"><i class="bi bi-flag"></i></div>
+                            <h3>Mission</h3>
+                            <p>
+                                Nexxus Lab Philippines makes technology accessible by lowering entry barriers. We offer
+                                competitive, value-driven pricing without industry premiums, empowering companies and
+                                individuals to create their own tech solutions.
+                            </p>
+                        </article>
+                        <article class="info-card principle-card">
+                            <div class="principle-icon" aria-hidden="true"><i class="bi bi-eye"></i></div>
+                            <h3>Vision</h3>
+                            <p>
+                                Nexxus Lab Philippines envisions a world where technology is accessible to all,
+                                empowering individuals and businesses. We drive innovation and progress for our clients
+                                and country.
+                            </p>
+                        </article>
+                        <article class="info-card principle-card">
+                            <div class="principle-icon" aria-hidden="true"><i class="bi bi-gem"></i></div>
+                            <h3>Values</h3>
+                            <p>
+                                Nexxus Lab values open communication, integrity, and reliability. We foster an
+                                inclusive, empathetic work environment with mutual support and respect.
+                            </p>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section id="team" class="page-section">
+                <div class="section-inner">
+                    <h2 class="section-title">Team</h2>
+                    <p class="section-subtitle">A small team with a big delivery mindset.</p>
+
+                    <div class="team-reveal-grid" aria-label="Team members">
+                        <article class="team-reveal" data-overlay="orange" aria-label="Chris Bautista">
+                            <button class="team-reveal__toggle" type="button" aria-expanded="false" aria-label="Toggle details for Chris Bautista">
+                                <img class="team-reveal__img" src="./assets/images/team/chris-bautista.svg" alt="Chris Bautista" loading="lazy" />
+                            </button>
+                            <div class="team-reveal__overlay" role="group" aria-label="Chris Bautista details">
+                                <h3>Chris Bautista</h3>
+                                <p>Founder</p>
+                                <div class="team-reveal__links" aria-label="Social links">
+                                    <a href="#" aria-label="Facebook"><i class="bi bi-facebook" aria-hidden="true"></i></a>
+                                    <a href="#" aria-label="Instagram"><i class="bi bi-instagram" aria-hidden="true"></i></a>
+                                    <a href="#" aria-label="LinkedIn"><i class="bi bi-linkedin" aria-hidden="true"></i></a>
+                                </div>
+                            </div>
+                        </article>
+
+                        <article class="team-reveal" data-overlay="orange" data-fit="contain" aria-label="OJT Team">
+                            <button class="team-reveal__toggle" type="button" aria-expanded="false" aria-label="Toggle details for OJT Team">
+                                <img class="team-reveal__img" src="./assets/images/team/picOjt.png.jpg" alt="OJT Team" loading="lazy" />
+                            </button>
+                            <div class="team-reveal__overlay" role="group" aria-label="OJT Team details">
+                                <h3>OJT Team</h3>
+                                <p>Interns</p>
+                                <div class="team-reveal__links" aria-label="Social links">
+                                    <a href="#" aria-label="Facebook"><i class="bi bi-facebook" aria-hidden="true"></i></a>
+                                    <a href="#" aria-label="Instagram"><i class="bi bi-instagram" aria-hidden="true"></i></a>
+                                    <a href="#" aria-label="LinkedIn"><i class="bi bi-linkedin" aria-hidden="true"></i></a>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section id="contact" class="page-section">
+                <div class="section-inner">
+                    <h2 class="section-title">Contact</h2>
+                    <p class="section-subtitle">Book a meeting or send us an email.</p>
+
+                    <div class="contact-grid">
+                        <div class="contact-booking">
+                            <h3 class="contact-block-title">GET IN TOUCH WITH US</h3>
+                            <p class="contact-block-subtitle">Set a google meeting appointment with us!</p>
+
+                            <div class="calendly-wrap" aria-label="Calendly booking widget">
+                                <div
+                                    class="calendly-inline-widget"
+                                    data-url="https://calendly.com/your-calendly-username/30min"
+                                ></div>
+                            </div>
+                        </div>
+
+                        <form class="contact-form" autocomplete="on">
+                            <h3 class="contact-block-title">EMAIL US!</h3>
+                            <p class="contact-block-subtitle">If you don't need to book a meeting with us, email us here!</p>
+                            <label>
+                                <span>Name</span>
+                                <input type="text" name="name" placeholder="Your name" required />
+                            </label>
+                            <label>
+                                <span>Email</span>
+                                <input type="email" name="email" placeholder="you@email.com" required />
+                            </label>
+                            <label>
+                                <span>Message</span>
+                                <textarea name="message" rows="5" placeholder="What are you building?" required></textarea>
+                            </label>
+                            <button type="submit" class="btn-primary">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </main>
 
         <ul class="sci">
             <li><a href="#"><i class="bi bi-facebook"></i></a></li>
@@ -110,6 +323,7 @@
         
         <script src="https://code.jquery.com/jquery-3.7.0.js" ></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+        <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
         <script src="./script.js"></script>
 
         <script type="text/javascript">
@@ -120,17 +334,97 @@
           });
         </script>
 
-<footer id="footer">
-    <div class="footer-logo text-center"><img src="./images/LOGO NexxusLab.png" alt=""></div>
-    
-    <div class="credite text-center">
-        Designed By <a href="https://github.com/sonadukane18" target="_blank">@SonaDukane18</a>
-    </div>
-    <div class="copyright text-center">
-      &copy; Copyright <strong><span>© 2026 Nexxus Lab</span></strong>. All Rights Reserved
-  </div>
+<footer id="footer" aria-label="Footer">
+    <div class="footer-inner">
+        <div class="footer-brand">
+            <img class="footer-brand__logo" src="./images/LOGO NexxusLab.png" alt="Nexxus Lab" />
+            <p class="footer-brand__copy">Copyright © 2026 by Nexxus Lab, All rights reserved.</p>
+        </div>
 
+        <div class="footer-col">
+            <h4>Contact Us</h4>
+            <ul class="footer-list">
+                <li>
+                    <a
+                        href="https://www.google.com/maps/place/Salcedo,+Legazpi+Village,+Makati,+Kalakhang+Maynila/@14.5557701,121.0146225,17z/data=!4m6!3m5!1s0x3397c90dddabdcd5:0x444d8d85b989df55!8m2!3d14.556767!4d121.0153735!16s%2Fg%2F1tx_3x9t?entry=ttu"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="Open Salcedo St., Legaspi Village in Google Maps"
+                    >
+                        Salcedo St., Legaspi Village<br />Makati City 1299, Philippines
+                    </a>
+                </li>
+                <li>+63 927-143-0884</li>
+                <li><a href="mailto:team@nexxuslab.com">team@nexxuslab.com</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-col">
+            <h4>Our Company</h4>
+            <ul class="footer-links">
+                <li><a href="#home">About Us</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#contact">Contact Us</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-col">
+            <h4>Resources</h4>
+            <ul class="footer-links">
+                <li><a href="#contact">Partnerships</a></li>
+                <li><a href="#portfolio">Projects</a></li>
+            </ul>
+        </div>
+    </div>
 </footer>
+
+<!-- Chatbot widget -->
+<div class="chatbot" id="chatbot">
+    <button
+        class="chatbot-launch"
+        type="button"
+        aria-label="Open chat"
+        aria-haspopup="dialog"
+        aria-expanded="false"
+        aria-controls="chatbot-panel"
+    >
+        <img src="./images/chatbotlogo.png" alt="" loading="lazy" decoding="async" />
+    </button>
+
+    <section
+        class="chatbot-panel"
+        id="chatbot-panel"
+        role="dialog"
+        aria-label="Nexxus Lab chat"
+        hidden
+    >
+        <header class="chatbot-header">
+            <div class="chatbot-title">
+                <span class="chatbot-title__name">Nexxus Assistant</span>
+                <span class="chatbot-title__status">Online</span>
+            </div>
+            <div class="chatbot-header__actions">
+                <button class="chatbot-reset" type="button" aria-label="Reset chat">
+                    <img src="./images/resetlogo.png" alt="" loading="lazy" decoding="async" />
+                </button>
+                <button class="chatbot-close" type="button" aria-label="Close chat">×</button>
+            </div>
+        </header>
+        <div class="chatbot-messages" aria-live="polite" aria-relevant="additions"></div>
+        <form class="chatbot-form" autocomplete="off">
+            <input
+                class="chatbot-input"
+                name="message"
+                type="text"
+                placeholder="Ask about services, projects, or contact…"
+                autocomplete="off"
+                inputmode="text"
+                required
+            />
+            <button class="chatbot-send" type="submit">Send</button>
+        </form>
+    </section>
+</div>
 
     </body>
 </html>

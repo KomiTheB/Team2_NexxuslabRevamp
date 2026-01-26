@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="80" y1="70" x2="440" y2="460" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#00c2de" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#0b0f14" stop-opacity="0.95"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(150 150) rotate(30) scale(280)">
+      <stop stop-color="#00c2de" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#00c2de" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="512" height="512" rx="120" fill="#0b0f14"/>
+  <rect width="512" height="512" rx="120" fill="url(#glow)"/>
+  <rect x="44" y="44" width="424" height="424" rx="96" fill="url(#bg)" stroke="#00c2de" stroke-opacity="0.22" stroke-width="2"/>
+
+  <!-- Group icon style -->
+  <circle cx="210" cy="218" r="54" fill="#ffffff" fill-opacity="0.16"/>
+  <circle cx="312" cy="228" r="46" fill="#ffffff" fill-opacity="0.12"/>
+  <path d="M120 448c8-72 64-118 120-118s112 46 120 118" fill="#ffffff" fill-opacity="0.12"/>
+
+  <text x="256" y="330" text-anchor="middle" font-family="Roboto, Arial, sans-serif" font-size="74" font-weight="800" fill="#ffffff" fill-opacity="0.92" letter-spacing="2">OJT</text>
+  <text x="256" y="372" text-anchor="middle" font-family="Roboto, Arial, sans-serif" font-size="24" font-weight="500" fill="#ffffff" fill-opacity="0.7" letter-spacing="3">TEAM</text>
+</svg>

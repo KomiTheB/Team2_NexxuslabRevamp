@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="64" y1="64" x2="448" y2="448" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#00c2de" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#0b0f14" stop-opacity="0.9"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(170 150) rotate(45) scale(260)">
+      <stop stop-color="#00c2de" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#00c2de" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect x="0" y="0" width="512" height="512" rx="120" fill="#0b0f14"/>
+  <rect x="0" y="0" width="512" height="512" rx="120" fill="url(#glow)"/>
+  <rect x="44" y="44" width="424" height="424" rx="96" fill="url(#bg)" stroke="#00c2de" stroke-opacity="0.25" stroke-width="2"/>
+
+  <!-- Simple silhouette -->
+  <circle cx="256" cy="214" r="78" fill="#ffffff" fill-opacity="0.18"/>
+  <path d="M122 448c10-86 74-136 134-136h0c60 0 124 50 134 136" fill="#ffffff" fill-opacity="0.14"/>
+
+  <!-- Initials -->
+  <text x="256" y="300" text-anchor="middle" font-family="Roboto, Arial, sans-serif" font-size="92" font-weight="700" fill="#ffffff" fill-opacity="0.92" letter-spacing="2">CB</text>
+  <text x="256" y="360" text-anchor="middle" font-family="Roboto, Arial, sans-serif" font-size="24" font-weight="500" fill="#ffffff" fill-opacity="0.7" letter-spacing="3">CHRIS BAUTISTA</text>
+</svg>
