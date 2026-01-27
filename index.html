@@ -17,11 +17,20 @@
     </head>
 
     <body>
+
+        <div class="scroll-progress" aria-hidden="true">
+            <div class="scroll-progress__bar"></div>
+        </div>
         
     <!-- Header -->
         <header>
            <!--<span class="year">2018-2023</span>--> 
             <a href="#home" class="logo"><img src="./images/LOGO NexxusLab.png" alt="Nexxus Lab" /></a>
+            <a
+                class="header-cta"
+                href="https://calendly.com/acseleon1/30min"
+                data-calendly-popup
+            >Book a Call</a>
             <a href="#" class="menu" aria-label="Toggle navigation" onclick="toggleMenu();"></a>
             
         </header>
@@ -50,7 +59,10 @@
 
             <div class="content">
 
-                <h1>Nexxus Lab</h1>
+                <div class="hero-title">
+                    <img class="hero-title__logo" src="./images/logo1.png" alt="Nexxus Lab" loading="eager" decoding="async" />
+                    <h1>Nexxus Lab</h1>
+                </div>
                 <h3 class="model service-1 active">Mock-ups &amp; Prototypes</h3>
                 <h3 class="model service-2">Software Development</h3>
                 <h3 class="model service-3">Network Security</h3>
@@ -298,7 +310,7 @@
                             <div class="calendly-wrap" aria-label="Calendly booking widget">
                                 <div
                                     class="calendly-inline-widget"
-                                    data-url="https://calendly.com/your-calendly-username/30min"
+                                    data-url="https://calendly.com/acseleon1/30min"
                                 ></div>
                             </div>
                         </div>
@@ -435,6 +447,10 @@
         </form>
     </section>
 </div>
+
+<button class="back-to-top" type="button" aria-label="Back to top" aria-hidden="true">
+    <i class="bi bi-arrow-up" aria-hidden="true"></i>
+</button>
 
     </body>
 </html>

@@ -374,6 +374,114 @@ function initPortfolioSlider(){
     startAutoplay();
 }
 
+function initScrollProgress(){
+    const bar = document.querySelector('.scroll-progress__bar');
+    if (!bar) return;
+
+    let ticking = false;
+    function update(){
+        ticking = false;
+        const scrollTop = window.scrollY || document.documentElement.scrollTop || 0;
+        const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const progress = docHeight > 0 ? Math.min(1, Math.max(0, scrollTop / docHeight)) : 0;
+        bar.style.width = `${(progress * 100).toFixed(2)}%`;
+    }
+
+    function onScroll(){
+        if (ticking) return;
+        ticking = true;
+        window.requestAnimationFrame(update);
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    update();
+}
+
+function initScrollReveal(){
+    const targets = Array.from(
+        document.querySelectorAll(
+            [
+                '.banner .content',
+                '.screen.screen-logo',
+                '.gallery',
+                '.page-section .section-title',
+                '.page-section .section-subtitle',
+                '.info-card',
+                '.portfolio-slider',
+                '.team-reveal',
+                '.contact-booking',
+                '.contact-form',
+                '#footer .footer-inner',
+            ].join(',')
+        )
+    );
+
+    if (targets.length === 0) return;
+    targets.forEach((el) => el.classList.add('reveal'));
+
+    if (!('IntersectionObserver' in window)) {
+        targets.forEach((el) => el.classList.add('is-visible'));
+        return;
+    }
+
+    const observer = new IntersectionObserver(
+        (entries) => {
+            entries.forEach((entry) => {
+                if (!entry.isIntersecting) return;
+                entry.target.classList.add('is-visible');
+                observer.unobserve(entry.target);
+            });
+        },
+        {
+            root: null,
+            rootMargin: '0px 0px -12% 0px',
+            threshold: 0.12,
+        }
+    );
+
+    targets.forEach((el) => observer.observe(el));
+}
+
+function initBackToTop(){
+    const button = document.querySelector('.back-to-top');
+    if (!button) return;
+
+    let ticking = false;
+    function update(){
+        ticking = false;
+        const show = (window.scrollY || 0) > 520;
+        button.classList.toggle('is-visible', show);
+        button.setAttribute('aria-hidden', show ? 'false' : 'true');
+    }
+
+    function onScroll(){
+        if (ticking) return;
+        ticking = true;
+        window.requestAnimationFrame(update);
+    }
+
+    button.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    update();
+}
+
+function initCalendlyPopup(){
+    const triggers = Array.from(document.querySelectorAll('[data-calendly-popup]'));
+    if (triggers.length === 0) return;
+
+    triggers.forEach((trigger) => {
+        trigger.addEventListener('click', (event) => {
+            if (!window.Calendly || typeof window.Calendly.initPopupWidget !== 'function') return;
+            event.preventDefault();
+            window.Calendly.initPopupWidget({ url: 'https://calendly.com/acseleon1/30min' });
+        });
+    });
+}
+
 function initTeamReveal(){
     const cards = Array.from(document.querySelectorAll('.team-reveal'));
     if (cards.length === 0) return;
@@ -743,6 +851,10 @@ document.addEventListener('DOMContentLoaded', () => {
     initPortfolioSlider();
     initTeamReveal();
     initChatbot();
+    initScrollReveal();
+    initScrollProgress();
+    initBackToTop();
+    initCalendlyPopup();
 });
 
 
