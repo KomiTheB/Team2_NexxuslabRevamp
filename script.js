@@ -207,212 +207,177 @@ function initPortfolioSlider(){
     const prevButton = slider.querySelector('.portfolio-nav.prev');
     const nextButton = slider.querySelector('.portfolio-nav.next');
     const dotsContainer = slider.querySelector('.portfolio-dots');
-    const viewport = slider.querySelector('.portfolio-viewport');
 
     if (!track || slides.length === 0) return;
 
     let currentIndex = 0;
     let intervalId = null;
-    let theta = 360 / slides.length;
-    let radius = 560;
+    let isAnimating = false;
+    let isPaused = false;
 
-    const intervalMs = Math.max(1500, Number(slider.getAttribute('data-interval')) || 4500);
-    const autoplay = (slider.getAttribute('data-autoplay') || 'false') === 'true';
+    const intervalMs = Math.max(2500, Number(slider.getAttribute('data-interval')) || 4500);
 
-    function updateDots(){
-        if (!dotsContainer) return;
-        const dots = Array.from(dotsContainer.querySelectorAll('.portfolio-dot'));
-        dots.forEach((dot, index) => dot.classList.toggle('active', index === currentIndex));
-    }
+    function updateSlider() {
+        if (isAnimating) return;
+        isAnimating = true;
 
-    function setIndex(nextIndex){
-        const normalized = ((nextIndex % slides.length) + slides.length) % slides.length;
-        currentIndex = normalized;
-
-        track.style.setProperty('--rotation', `${-theta * currentIndex}deg`);
-
+        // Update slide positions for 3D effect
         slides.forEach((slide, index) => {
-            const isActive = index === currentIndex;
-            slide.classList.toggle('is-active', isActive);
-            slide.setAttribute('aria-hidden', isActive ? 'false' : 'true');
+            // Remove all position classes
+            slide.classList.remove('active', 'prev', 'next', 'far-prev', 'far-next');
+            
+            // Calculate relative position
+            let diff = index - currentIndex;
+            
+            // Handle wrapping for infinite loop effect
+            if (diff > slides.length / 2) diff -= slides.length;
+            if (diff < -slides.length / 2) diff += slides.length;
+            
+            // Assign position classes based on relative position
+            if (diff === 0) {
+                slide.classList.add('active');
+            } else if (diff === -1) {
+                slide.classList.add('prev');
+            } else if (diff === 1) {
+                slide.classList.add('next');
+            } else if (diff === -2) {
+                slide.classList.add('far-prev');
+            } else if (diff === 2) {
+                slide.classList.add('far-next');
+            }
         });
+        
+        // Update dots
+        if (dotsContainer) {
+            const dots = Array.from(dotsContainer.querySelectorAll('.portfolio-dot'));
+            dots.forEach((dot, index) => dot.classList.toggle('active', index === currentIndex));
+        }
 
-        updateDots();
+        // Update slide counter
+        const counterCurrent = slider.querySelector('.counter-current');
+        const counterTotal = slider.querySelector('.counter-total');
+        if (counterCurrent) {
+            counterCurrent.textContent = String(currentIndex + 1).padStart(2, '0');
+        }
+        if (counterTotal) {
+            counterTotal.textContent = String(slides.length).padStart(2, '0');
+        }
+
+        // Reset animation lock after transition
+        setTimeout(() => {
+            isAnimating = false;
+        }, 800);
     }
 
-    function layout(){
-        theta = 360 / slides.length;
-
-        // Use slide width to compute a reasonable radius.
-        const sample = slides[0];
-        const rect = sample.getBoundingClientRect();
-        const slideWidth = rect.width || slider.clientWidth || 800;
-        const ideal = (slideWidth / 2) / Math.tan(Math.PI / slides.length);
-        // With more slides, we need a larger radius to prevent overlap.
-        const maxRadius = Math.max(980, Math.min(1800, slides.length * 160));
-        radius = Math.round(Math.max(360, Math.min(maxRadius, ideal + 90)));
-
-        slider.style.setProperty('--portfolio-radius', `${radius}px`);
-
-        slides.forEach((slide, index) => {
-            slide.style.setProperty('--angle', `${theta * index}deg`);
-        });
-
-        setIndex(currentIndex);
+    function goToSlide(index) {
+        if (isAnimating) return;
+        
+        // Wrap around
+        if (index < 0) index = slides.length - 1;
+        if (index >= slides.length) index = 0;
+        currentIndex = index;
+        updateSlider();
     }
 
-    function startAutoplay(){
-        if (!autoplay) return;
+    function nextSlide() {
+        goToSlide(currentIndex + 1);
+    }
+
+    function prevSlide() {
+        goToSlide(currentIndex - 1);
+    }
+
+    function startAutoplay() {
         stopAutoplay();
-        intervalId = window.setInterval(() => setIndex(currentIndex + 1), intervalMs);
+        intervalId = setInterval(nextSlide, intervalMs);
     }
 
-    function stopAutoplay(){
-        if (intervalId !== null) {
-            window.clearInterval(intervalId);
+    function stopAutoplay() {
+        if (intervalId) {
+            clearInterval(intervalId);
             intervalId = null;
         }
     }
 
+    function pauseAutoplay() {
+        isPaused = true;
+        stopAutoplay();
+    }
+
+    function resumeAutoplay() {
+        isPaused = false;
+        startAutoplay();
+    }
+
+    // Create dots
     if (dotsContainer) {
         dotsContainer.innerHTML = '';
         slides.forEach((_, index) => {
             const dot = document.createElement('button');
             dot.type = 'button';
-            dot.className = 'portfolio-dot';
+            dot.className = 'portfolio-dot' + (index === 0 ? ' active' : '');
             dot.setAttribute('aria-label', `Go to slide ${index + 1}`);
             dot.addEventListener('click', () => {
-                setIndex(index);
-                startAutoplay();
+                goToSlide(index);
+                resumeAutoplay();
             });
             dotsContainer.appendChild(dot);
         });
     }
 
+    // Button events
     prevButton?.addEventListener('click', () => {
-        setIndex(currentIndex - 1);
-        startAutoplay();
+        prevSlide();
+        resumeAutoplay();
     });
+    
     nextButton?.addEventListener('click', () => {
-        setIndex(currentIndex + 1);
-        startAutoplay();
+        nextSlide();
+        resumeAutoplay();
     });
 
-    slider.addEventListener('mouseenter', stopAutoplay);
-    slider.addEventListener('mouseleave', startAutoplay);
+    // Pause on hover, resume on leave
+    slider.addEventListener('mouseenter', pauseAutoplay);
+    slider.addEventListener('mouseleave', resumeAutoplay);
 
-    // Drag state for distinguishing clicks from swipes.
-    let isDragging = false;
-    let hasDragged = false;
-    let pointerDownTime = 0;
-    let pointerDownX = 0;
-    let pointerDownY = 0;
-
-    // Click: active slide follows the link, non-active slide rotates carousel.
-    slides.forEach((slide, idx) => {
-        const link = slide.querySelector('.portfolio-link');
-        if (!link) return;
-
-        // Track where the pointer went down on this slide
-        slide.addEventListener('pointerdown', (event) => {
-            pointerDownTime = Date.now();
-            pointerDownX = event.clientX;
-            pointerDownY = event.clientY;
-        });
-
-        // Use pointerup to detect tap vs drag
-        slide.addEventListener('pointerup', (event) => {
-            const elapsed = Date.now() - pointerDownTime;
-            const movedX = Math.abs(event.clientX - pointerDownX);
-            const movedY = Math.abs(event.clientY - pointerDownY);
-
-            // If it was a quick tap without much movement, treat as click
-            const isClick = elapsed < 300 && movedX < 10 && movedY < 10;
-
-            if (!isClick || hasDragged) {
-                hasDragged = false;
-                return;
-            }
-
-            // Check if THIS slide is currently active
-            if (slide.classList.contains('is-active')) {
-                // Active slide — open the link
-                const href = link.getAttribute('href');
-                if (href) {
-                    window.open(href, '_blank', 'noopener,noreferrer');
-                }
-                return;
-            }
-
-            // Not active — rotate to this slide
-            setIndex(idx);
-            startAutoplay();
-        });
-
-        // Block default link behavior - we handle it manually
-        link.addEventListener('click', (event) => {
-            event.preventDefault();
-        });
-    });
-
-    // Keyboard controls when the carousel is focused.
-    slider.addEventListener('keydown', (event) => {
-        if (event.key === 'ArrowLeft') {
-            event.preventDefault();
-            setIndex(currentIndex - 1);
-            startAutoplay();
-        } else if (event.key === 'ArrowRight') {
-            event.preventDefault();
-            setIndex(currentIndex + 1);
-            startAutoplay();
+    // Keyboard navigation
+    slider.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            prevSlide();
+            resumeAutoplay();
+        } else if (e.key === 'ArrowRight') {
+            e.preventDefault();
+            nextSlide();
+            resumeAutoplay();
         }
     });
 
-    // Pointer drag/swipe.
-    let dragStartX = null;
-    let lastDragX = null;
-    const dragTarget = viewport || slider;
+    // Touch/swipe support
+    let touchStartX = 0;
+    let touchEndX = 0;
 
-    dragTarget.addEventListener('pointerdown', (event) => {
-        dragStartX = event.clientX;
-        lastDragX = event.clientX;
-        hasDragged = false;
-        isDragging = true;
-        stopAutoplay();
-        try { dragTarget.setPointerCapture(event.pointerId); } catch (_) {}
-    });
+    slider.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+        pauseAutoplay();
+    }, { passive: true });
 
-    dragTarget.addEventListener('pointermove', (event) => {
-        if (dragStartX === null || lastDragX === null) return;
-
-        const dx = event.clientX - lastDragX;
-        const threshold = 40;
-        if (Math.abs(dx) >= threshold) {
-            hasDragged = true;
-            // Drag left -> next, drag right -> prev
-            setIndex(currentIndex + (dx < 0 ? 1 : -1));
-            lastDragX = event.clientX;
+    slider.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        const diff = touchStartX - touchEndX;
+        
+        if (Math.abs(diff) > 50) {
+            if (diff > 0) {
+                nextSlide();
+            } else {
+                prevSlide();
+            }
         }
-    });
+        resumeAutoplay();
+    }, { passive: true });
 
-    function endDrag(){
-        if (dragStartX === null) return;
-        dragStartX = null;
-        lastDragX = null;
-        isDragging = false;
-        startAutoplay();
-    }
-
-    dragTarget.addEventListener('pointerup', endDrag);
-    dragTarget.addEventListener('pointercancel', endDrag);
-    dragTarget.addEventListener('pointerleave', endDrag);
-
-    window.addEventListener('resize', () => {
-        window.requestAnimationFrame(layout);
-    });
-
-    layout();
-    setIndex(0);
+    // Initialize - always start autoplay loop
+    updateSlider();
     startAutoplay();
 }
 
@@ -1297,6 +1262,12 @@ document.addEventListener('DOMContentLoaded', () => {
     safeCall('initSectionReveal', initSectionReveal);
     safeCall('initFloatingParticles', initFloatingParticles);
     safeCall('initCardTilt', initCardTilt);
+    
+    // New enhanced effects
+    safeCall('initMouseTrail', initMouseTrail);
+    safeCall('initSmoothReveal', initSmoothReveal);
+    safeCall('initInteractiveOrbs', initInteractiveOrbs);
+    safeCall('initTextSplit', initTextSplit);
 });
 
 // ========== TYPING EFFECT ==========
@@ -1473,12 +1444,29 @@ function initCustomCursor() {
     let mouseX = 0, mouseY = 0;
     let ringX = 0, ringY = 0;
     
+    // Portfolio section - hide cursor when hovering
+    const portfolioSection = document.getElementById('portfolio');
+    
     document.addEventListener('mousemove', (e) => {
         mouseX = e.clientX;
         mouseY = e.clientY;
         
         dot.style.left = mouseX + 'px';
         dot.style.top = mouseY + 'px';
+        
+        // Check if mouse is over portfolio section
+        if (portfolioSection) {
+            const rect = portfolioSection.getBoundingClientRect();
+            const isOverPortfolio = e.clientY >= rect.top && e.clientY <= rect.bottom;
+            
+            if (isOverPortfolio) {
+                cursor.style.opacity = '0';
+                cursor.style.visibility = 'hidden';
+            } else {
+                cursor.style.opacity = '1';
+                cursor.style.visibility = 'visible';
+            }
+        }
     });
     
     // Smooth ring follow
@@ -1493,8 +1481,8 @@ function initCustomCursor() {
     }
     animateRing();
     
-    // Hover effect on interactive elements
-    const interactiveElements = document.querySelectorAll('a, button, .info-card, .team-reveal, .portfolio-slide, input, textarea');
+    // Hover effect on interactive elements (exclude portfolio)
+    const interactiveElements = document.querySelectorAll('a:not(#portfolio a), button:not(#portfolio button), .info-card, .team-reveal, input, textarea');
     
     interactiveElements.forEach(el => {
         el.addEventListener('mouseenter', () => {
@@ -1568,7 +1556,8 @@ function initScrollIndicator() {
 
 // ========== TEXT SCRAMBLE EFFECT ==========
 function initTextScramble() {
-    const scrambleElements = document.querySelectorAll('.section-title');
+    // Exclude portfolio section from scramble effect
+    const scrambleElements = document.querySelectorAll('.section-title:not(.portfolio-title)');
     const chars = '!<>-_\\/[]{}—=+*^?#________';
     
     scrambleElements.forEach(el => {
@@ -1601,6 +1590,11 @@ function initTextScramble() {
 function initSectionReveal() {
     const sections = document.querySelectorAll('.page-section');
     
+    // First, add the animate class to enable CSS transitions
+    sections.forEach(section => {
+        section.classList.add('animate-on-scroll');
+    });
+    
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -1616,11 +1610,18 @@ function initSectionReveal() {
             }
         });
     }, {
-        threshold: 0.15,
-        rootMargin: '-50px'
+        threshold: 0.1,
+        rootMargin: '0px'
     });
     
     sections.forEach(section => observer.observe(section));
+    
+    // Fallback: make all sections visible after 2 seconds in case observer doesn't trigger
+    setTimeout(() => {
+        sections.forEach(section => {
+            section.classList.add('section-visible');
+        });
+    }, 2000);
 }
 
 // ========== HOVER SOUND EFFECTS (optional - silent by default) ==========
@@ -1698,6 +1699,169 @@ function initCardTilt() {
         
         card.addEventListener('mouseleave', () => {
             card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
+        });
+    });
+}
+// ========== MOUSE TRAIL EFFECT ==========
+function initMouseTrail() {
+    const canvas = document.getElementById('mouseTrail');
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    let mouse = { x: 0, y: 0 };
+    let isMoving = false;
+    let moveTimeout;
+    
+    // Set canvas size
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+    
+    // Track mouse
+    document.addEventListener('mousemove', (e) => {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+        isMoving = true;
+        
+        // Add particles
+        for (let i = 0; i < 2; i++) {
+            particles.push({
+                x: mouse.x,
+                y: mouse.y,
+                size: Math.random() * 4 + 2,
+                speedX: (Math.random() - 0.5) * 2,
+                speedY: (Math.random() - 0.5) * 2,
+                life: 1,
+                color: Math.random() > 0.5 ? '#00c2de' : '#ff00ff'
+            });
+        }
+        
+        clearTimeout(moveTimeout);
+        moveTimeout = setTimeout(() => { isMoving = false; }, 100);
+    });
+    
+    // Animation loop
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        particles.forEach((p, index) => {
+            p.x += p.speedX;
+            p.y += p.speedY;
+            p.life -= 0.02;
+            p.size *= 0.97;
+            
+            if (p.life <= 0) {
+                particles.splice(index, 1);
+                return;
+            }
+            
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            ctx.fillStyle = p.color;
+            ctx.globalAlpha = p.life * 0.6;
+            ctx.fill();
+            ctx.globalAlpha = 1;
+        });
+        
+        // Limit particles
+        if (particles.length > 100) {
+            particles = particles.slice(-100);
+        }
+        
+        requestAnimationFrame(animate);
+    }
+    animate();
+}
+
+// ========== SMOOTH REVEAL ON SCROLL ==========
+function initSmoothReveal() {
+    const elements = document.querySelectorAll('.info-card, .team-reveal, .portfolio-slide, .contact-booking, .contact-form');
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting) {
+                setTimeout(() => {
+                    entry.target.classList.add('revealed');
+                }, index * 100);
+            }
+        });
+    }, {
+        threshold: 0.1,
+        rootMargin: '-50px'
+    });
+    
+    elements.forEach(el => {
+        el.classList.add('reveal-element');
+        observer.observe(el);
+    });
+}
+
+// ========== INTERACTIVE ORBS ==========
+function initInteractiveOrbs() {
+    const orbs = document.querySelectorAll('.orb');
+    if (orbs.length === 0) return;
+    
+    document.addEventListener('mousemove', (e) => {
+        const x = e.clientX / window.innerWidth;
+        const y = e.clientY / window.innerHeight;
+        
+        orbs.forEach((orb, index) => {
+            const speed = (index + 1) * 10;
+            const offsetX = (x - 0.5) * speed;
+            const offsetY = (y - 0.5) * speed;
+            
+            orb.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+        });
+    });
+}
+
+// ========== TEXT SPLIT ANIMATION ==========
+function initTextSplit() {
+    const titles = document.querySelectorAll('.hero-main-title');
+    
+    titles.forEach(title => {
+        const text = title.textContent;
+        title.innerHTML = '';
+        
+        text.split('').forEach((char, index) => {
+            const span = document.createElement('span');
+            span.textContent = char === ' ' ? '\u00A0' : char;
+            span.className = 'char';
+            span.style.animationDelay = `${index * 0.05}s`;
+            title.appendChild(span);
+        });
+    });
+}
+
+// ========== PARALLAX MOUSE EFFECT ==========
+function initParallaxMouse() {
+    const heroSection = document.querySelector('.banner');
+    if (!heroSection) return;
+    
+    const parallaxElements = heroSection.querySelectorAll('.hero-title, .screen-logo');
+    
+    heroSection.addEventListener('mousemove', (e) => {
+        const rect = heroSection.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width - 0.5;
+        const y = (e.clientY - rect.top) / rect.height - 0.5;
+        
+        parallaxElements.forEach((el, index) => {
+            const speed = (index + 1) * 20;
+            const moveX = x * speed;
+            const moveY = y * speed;
+            
+            el.style.transform = `translate(${moveX}px, ${moveY}px)`;
+        });
+    });
+    
+    heroSection.addEventListener('mouseleave', () => {
+        parallaxElements.forEach(el => {
+            el.style.transform = 'translate(0, 0)';
+            el.style.transition = 'transform 0.5s ease';
         });
     });
 }
