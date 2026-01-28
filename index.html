@@ -18,6 +18,29 @@
 
     <body>
 
+        <!-- Loading Screen -->
+        <div class="loader-screen" id="loaderScreen">
+            <div class="loader-content">
+                <div class="loader-logo">
+                    <img src="./images/LOGO NexxusLab.png" alt="Nexxus Lab" />
+                </div>
+                <div class="loader-bar">
+                    <div class="loader-bar__fill"></div>
+                </div>
+                <p class="loader-text">Loading Experience...</p>
+            </div>
+        </div>
+
+        <!-- Custom Cursor -->
+        <div class="custom-cursor" id="customCursor">
+            <div class="cursor-dot"></div>
+            <div class="cursor-ring"></div>
+        </div>
+
+        <div class="futuristic-bg" aria-hidden="true">
+            <canvas class="futuristic-bg__canvas" aria-hidden="true"></canvas>
+        </div>
+
         <div class="scroll-progress" aria-hidden="true">
             <div class="scroll-progress__bar"></div>
         </div>
@@ -31,21 +54,25 @@
                 href="https://calendly.com/acseleon1/30min"
                 data-calendly-popup
             >Book a Call</a>
-            <a href="#" class="menu" aria-label="Toggle navigation" onclick="toggleMenu();"></a>
+            <button class="menu-btn" aria-label="Toggle navigation" onclick="toggleMenu();">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
             
         </header>
 
+        <nav class="main-nav" id="mainNav">
+            <a href="#home">Home</a>
+            <a href="#services">Services</a>
+            <a href="#portfolio">Portfolio</a>
+            <a href="#principle">Principle</a>
+            <a href="#team">Team</a>
+            <a href="#contact">Contact</a>
+        </nav>
+
     <!-- Navigation --> 
         <section id="home" class="banner">
-            
-            <ul class="nav">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#services">Services</a></li>
-                <li><a href="#portfolio">Portfolio</a></li>
-                <li><a href="#principle">Principle</a></li>
-                <li><a href="#team">Team</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
 
             <div class="bg-video-list">
 
@@ -70,7 +97,7 @@
                 <h3 class="model service-5">Automata Development</h3>
                 <h3 class="model service-6">AI Marketing Services</h3>
                 <p>
-                We transform visions into experiences with our Mock-ups &amp; Prototypes services. Our designers create detailed, interactive prototypes as blueprints for your projects. Each prototype guides development with clarity and precision.
+                At NexxusLab, we transform ideas into interactive digital blueprints through our professional Mock-ups &amp; Prototypes service. By creating clickable, user-friendly prototypes, we help you validate concepts and identify usability gaps before you invest in full-scale development, ensuring every project is guided with clarity and precision. Our three-tiered approach ensures there is a package for every stage of growth. The Starter tier is ideal for early-stage ideas and solo founders, offering essential wireframe sketches, UI flows, and a basic clickable Figma prototype. The Growth tier suits teams refining their user experience by providing high-fidelity prototypes, user testing feedback, and annotated flow designs. For enterprises or investor-ready projects, our Scale tier delivers fully interactive prototypes, comprehensive UX audits, and a complete design system library to confidently align stakeholders and bring your vision to life efficiently.
                 </p>
                 <a href="#contact">Enquire</a>
             </div>
@@ -117,32 +144,44 @@
 
         <main>
             <section id="services" class="page-section">
+                <div class="section-divider">
+                    <span class="section-divider__line"></span>
+                    <span class="section-divider__icon"><i class="bi bi-stars"></i></span>
+                    <span class="section-divider__line"></span>
+                </div>
                 <div class="section-inner">
-                    <h2 class="section-title">Services</h2>
+                    <span class="section-badge">What We Do</span>
+                    <h2 class="section-title glitch-text" data-text="Services">Services</h2>
                     <p class="section-subtitle">End-to-end solutions for product, platform, and growth.</p>
 
-                    <div class="card-grid">
-                        <article class="info-card">
+                    <div class="card-grid stagger-fade">
+                        <article class="info-card shimmer hover-glow-spread">
+                            <div class="card-icon"><i class="bi bi-android2"></i></div>
                             <h3>Mock-ups &amp; Prototypes</h3>
                             <p>Interactive prototypes that align teams and accelerate development.</p>
                         </article>
-                        <article class="info-card">
+                        <article class="info-card shimmer hover-glow-spread">
+                            <div class="card-icon"><i class="bi bi-code-slash"></i></div>
                             <h3>Software Development</h3>
                             <p>Web apps, hybrid and native experiences built for scale.</p>
                         </article>
-                        <article class="info-card">
+                        <article class="info-card shimmer hover-glow-spread">
+                            <div class="card-icon"><i class="bi bi-shield-lock"></i></div>
                             <h3>Network Security</h3>
                             <p>Risk reduction with modern security practices and monitoring.</p>
                         </article>
-                        <article class="info-card">
+                        <article class="info-card shimmer hover-glow-spread">
+                            <div class="card-icon"><i class="bi bi-mortarboard"></i></div>
                             <h3>IT Support Training</h3>
                             <p>Practical, job-ready training and customer support excellence.</p>
                         </article>
-                        <article class="info-card">
+                        <article class="info-card shimmer hover-glow-spread">
+                            <div class="card-icon"><i class="bi bi-gear-wide-connected"></i></div>
                             <h3>Automata Development</h3>
                             <p>Automation that streamlines operations and boosts reliability.</p>
                         </article>
-                        <article class="info-card">
+                        <article class="info-card shimmer hover-glow-spread">
+                            <div class="card-icon"><i class="bi bi-robot"></i></div>
                             <h3>AI Marketing Services</h3>
                             <p>Data-driven campaigns, content workflows, and measurable ROI.</p>
                         </article>
@@ -151,8 +190,14 @@
             </section>
 
             <section id="portfolio" class="page-section">
+                <div class="section-divider">
+                    <span class="section-divider__line"></span>
+                    <span class="section-divider__icon"><i class="bi bi-collection"></i></span>
+                    <span class="section-divider__line"></span>
+                </div>
                 <div class="section-inner">
-                    <h2 class="section-title">Portfolio</h2>
+                    <span class="section-badge">Our Work</span>
+                    <h2 class="section-title glitch-text" data-text="Portfolio">Portfolio</h2>
                     <p class="section-subtitle">A snapshot of recent work and experiments.</p>
 
                     <div class="portfolio-slider" data-autoplay="true" data-interval="4500" aria-label="Portfolio slideshow" tabindex="0">
@@ -176,23 +221,8 @@
                                     </a>
                                 </figure>
                                 <figure class="portfolio-slide">
-                                    <a class="portfolio-link" href="https://sites.google.com/view/top100ai/home" target="_blank" rel="noopener noreferrer">
-                                        <img src="./assets/Portfolio3.png" alt="Top 100 AI" loading="lazy" />
-                                    </a>
-                                </figure>
-                                <figure class="portfolio-slide">
-                                    <a class="portfolio-link" href="https://sites.google.com/view/bonnie-factor/home" target="_blank" rel="noopener noreferrer">
-                                        <img src="./assets/Portfolio4.png" alt="Bonnie Factor" loading="lazy" />
-                                    </a>
-                                </figure>
-                                <figure class="portfolio-slide">
                                     <a class="portfolio-link" href="https://tapstaffingsolutions.com/#our-services" target="_blank" rel="noopener noreferrer">
                                         <img src="./assets/Portfolio5.png" alt="TAP Staffing Solutions" loading="lazy" />
-                                    </a>
-                                </figure>
-                                <figure class="portfolio-slide">
-                                    <a class="portfolio-link" href="https://sites.google.com/view/ai-defendbot/home" target="_blank" rel="noopener noreferrer">
-                                        <img src="./assets/Portfolio6.png" alt="AI DefendBot" loading="lazy" />
                                     </a>
                                 </figure>
                                 <figure class="portfolio-slide">
@@ -224,12 +254,18 @@
             </section>
 
             <section id="principle" class="page-section">
+                <div class="section-divider">
+                    <span class="section-divider__line"></span>
+                    <span class="section-divider__icon"><i class="bi bi-diamond"></i></span>
+                    <span class="section-divider__line"></span>
+                </div>
                 <div class="section-inner">
-                    <h2 class="section-title">Principles of <span class="accent">Nexxus Lab</span></h2>
+                    <span class="section-badge">Who We Are</span>
+                    <h2 class="section-title">Principles of <span class="accent gradient-text">Nexxus Lab</span></h2>
 
                     <div class="card-grid">
-                        <article class="info-card principle-card">
-                            <div class="principle-icon" aria-hidden="true"><i class="bi bi-flag"></i></div>
+                        <article class="info-card principle-card neon-pulse-border">
+                            <div class="principle-icon float-element" aria-hidden="true"><i class="bi bi-flag"></i></div>
                             <h3>Mission</h3>
                             <p>
                                 Nexxus Lab Philippines makes technology accessible by lowering entry barriers. We offer
@@ -237,8 +273,8 @@
                                 individuals to create their own tech solutions.
                             </p>
                         </article>
-                        <article class="info-card principle-card">
-                            <div class="principle-icon" aria-hidden="true"><i class="bi bi-eye"></i></div>
+                        <article class="info-card principle-card neon-pulse-border">
+                            <div class="principle-icon float-element" aria-hidden="true"><i class="bi bi-eye"></i></div>
                             <h3>Vision</h3>
                             <p>
                                 Nexxus Lab Philippines envisions a world where technology is accessible to all,
@@ -246,8 +282,8 @@
                                 and country.
                             </p>
                         </article>
-                        <article class="info-card principle-card">
-                            <div class="principle-icon" aria-hidden="true"><i class="bi bi-gem"></i></div>
+                        <article class="info-card principle-card neon-pulse-border">
+                            <div class="principle-icon float-element" aria-hidden="true"><i class="bi bi-gem"></i></div>
                             <h3>Values</h3>
                             <p>
                                 Nexxus Lab values open communication, integrity, and reliability. We foster an
@@ -259,51 +295,89 @@
             </section>
 
             <section id="team" class="page-section">
+                <div class="section-divider">
+                    <span class="section-divider__line"></span>
+                    <span class="section-divider__icon"><i class="bi bi-people"></i></span>
+                    <span class="section-divider__line"></span>
+                </div>
                 <div class="section-inner">
-                    <h2 class="section-title">Team</h2>
-                    <p class="section-subtitle">A small team with a big delivery mindset.</p>
+                    <span class="section-badge">Our People</span>
+                    <h2 class="section-title glitch-text" data-text="Meet The Team">Meet The Team</h2>
+                    <p class="section-subtitle">A small team with a big delivery mindset. Passionate innovators dedicated to transforming ideas into reality.</p>
 
                     <div class="team-reveal-grid" aria-label="Team members">
-                        <article class="team-reveal" data-overlay="orange" aria-label="Chris Bautista">
+                        <article class="team-reveal card-tilt-3d" data-overlay="orange" aria-label="Chris Bautista">
                             <button class="team-reveal__toggle" type="button" aria-expanded="false" aria-label="Toggle details for Chris Bautista">
-                                <img class="team-reveal__img" src="./assets/images/team/chris-bautista.svg" alt="Chris Bautista" loading="lazy" />
+                                <img class="team-reveal__img" src="./images/Team_SirChris.png" alt="Chris Bautista" loading="lazy" />
                             </button>
                             <div class="team-reveal__overlay" role="group" aria-label="Chris Bautista details">
+                                <span class="team-reveal__badge">Leadership</span>
                                 <h3>Chris Bautista</h3>
-                                <p>Founder</p>
+                                <p class="team-reveal__role">Founder & CEO</p>
+                                <p class="team-reveal__bio">Visionary leader with 10+ years in tech innovation, driving digital transformation for businesses worldwide.</p>
+                                <div class="team-reveal__skills">
+                                    <span>Strategy</span>
+                                    <span>Leadership</span>
+                                </div>
                                 <div class="team-reveal__links" aria-label="Social links">
-                                    <a href="#" aria-label="Facebook"><i class="bi bi-facebook" aria-hidden="true"></i></a>
-                                    <a href="#" aria-label="Instagram"><i class="bi bi-instagram" aria-hidden="true"></i></a>
-                                    <a href="#" aria-label="LinkedIn"><i class="bi bi-linkedin" aria-hidden="true"></i></a>
+                                    <a href="https://www.facebook.com/nexxuslab" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="bi bi-facebook" aria-hidden="true"></i></a>
+                                    <a href="https://www.linkedin.com/in/chris-bautista-31935854/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="bi bi-linkedin" aria-hidden="true"></i></a>
                                 </div>
                             </div>
                         </article>
 
-                        <article class="team-reveal" data-overlay="orange" data-fit="contain" aria-label="OJT Team">
+                        <article class="team-reveal card-tilt-3d" data-overlay="orange" data-fit="contain" aria-label="OJT Team">
                             <button class="team-reveal__toggle" type="button" aria-expanded="false" aria-label="Toggle details for OJT Team">
                                 <img class="team-reveal__img" src="./assets/images/team/picOjt.png.jpg" alt="OJT Team" loading="lazy" />
                             </button>
                             <div class="team-reveal__overlay" role="group" aria-label="OJT Team details">
+                                <span class="team-reveal__badge">Development</span>
                                 <h3>OJT Team</h3>
-                                <p>Interns</p>
+                                <p class="team-reveal__role">Interns & Future Innovators</p>
+                                <p class="team-reveal__bio">Talented young minds bringing fresh perspectives and energy to every project we undertake.</p>
+                                <div class="team-reveal__skills">
+                                    <span>Web Dev</span>
+                                    <span>Design</span>
+                                    <span>Innovation</span>
+                                </div>
                                 <div class="team-reveal__links" aria-label="Social links">
-                                    <a href="#" aria-label="Facebook"><i class="bi bi-facebook" aria-hidden="true"></i></a>
-                                    <a href="#" aria-label="Instagram"><i class="bi bi-instagram" aria-hidden="true"></i></a>
-                                    <a href="#" aria-label="LinkedIn"><i class="bi bi-linkedin" aria-hidden="true"></i></a>
+                                    <a href="https://www.facebook.com/nexxuslab" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="bi bi-facebook" aria-hidden="true"></i></a>
+                                    <a href="https://www.linkedin.com/company/nexxus-lab/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="bi bi-linkedin" aria-hidden="true"></i></a>
                                 </div>
                             </div>
                         </article>
+                    </div>
+
+                    <div class="team-stats">
+                        <div class="team-stat">
+                            <span class="team-stat__number">24/7</span>
+                            <span class="team-stat__label">Support Available</span>
+                        </div>
+                        <div class="team-stat">
+                            <span class="team-stat__number">50+</span>
+                            <span class="team-stat__label">Projects Delivered</span>
+                        </div>
+                        <div class="team-stat">
+                            <span class="team-stat__number">100%</span>
+                            <span class="team-stat__label">Client Satisfaction</span>
+                        </div>
                     </div>
                 </div>
             </section>
 
             <section id="contact" class="page-section">
+                <div class="section-divider">
+                    <span class="section-divider__line"></span>
+                    <span class="section-divider__icon"><i class="bi bi-envelope-heart"></i></span>
+                    <span class="section-divider__line"></span>
+                </div>
                 <div class="section-inner">
-                    <h2 class="section-title">Contact</h2>
+                    <span class="section-badge">Get Started</span>
+                    <h2 class="section-title glitch-text" data-text="Contact">Contact</h2>
                     <p class="section-subtitle">Book a meeting or send us an email.</p>
 
                     <div class="contact-grid">
-                        <div class="contact-booking">
+                        <div class="contact-booking shimmer">
                             <h3 class="contact-block-title">GET IN TOUCH WITH US</h3>
                             <p class="contact-block-subtitle">Set a google meeting appointment with us!</p>
 
@@ -338,9 +412,8 @@
         </main>
 
         <ul class="sci">
-            <li><a href="#"><i class="bi bi-facebook"></i></a></li>
-            <li><a href="#"><i class="bi bi-instagram"></i></a></li>
-            <li><a href="#"><i class="bi bi-youtube"></i></a></li>
+            <li><a href="https://www.facebook.com/nexxuslab" target="_blank" rel="noopener noreferrer"><i class="bi bi-facebook"></i></a></li>
+            <li><a href="https://www.linkedin.com/company/nexxus-lab/" target="_blank" rel="noopener noreferrer"><i class="bi bi-linkedin"></i></a></li>
         </ul>
         
         <script src="https://code.jquery.com/jquery-3.7.0.js" ></script>
