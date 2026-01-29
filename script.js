@@ -177,7 +177,7 @@ trailers.forEach(trailer =>{
 
 }
 
-document.addEventListener('submit', (event) => {
+document.addEventListener('submit', async (event) => {
     const form = event.target;
     if (!(form instanceof HTMLFormElement)) return;
     if (!form.classList.contains('contact-form')) return;
@@ -188,14 +188,60 @@ document.addEventListener('submit', (event) => {
     const name = String(formData.get('name') || '').trim();
     const email = String(formData.get('email') || '').trim();
     const message = String(formData.get('message') || '').trim();
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const statusDiv = form.querySelector('#formStatus');
 
     if (!name || !email || !message) {
-        alert('Please fill out all fields.');
+        if (statusDiv) {
+            statusDiv.textContent = 'Please fill out all fields.';
+            statusDiv.className = 'form-status error';
+        }
         return;
     }
 
-    alert('Thanks! Your message has been captured (demo form).');
-    form.reset();
+    // Disable button and show loading state
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Sending...';
+    }
+    if (statusDiv) {
+        statusDiv.textContent = '';
+        statusDiv.className = 'form-status';
+    }
+
+    try {
+        const response = await fetch(form.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
+
+        if (response.ok) {
+            if (statusDiv) {
+                statusDiv.textContent = 'Thank you! Your message has been sent successfully.';
+                statusDiv.className = 'form-status success';
+            }
+            form.reset();
+        } else {
+            const data = await response.json();
+            if (statusDiv) {
+                statusDiv.textContent = data.errors ? data.errors.map(e => e.message).join(', ') : 'Oops! Something went wrong. Please try again.';
+                statusDiv.className = 'form-status error';
+            }
+        }
+    } catch (error) {
+        if (statusDiv) {
+            statusDiv.textContent = 'Network error. Please check your connection and try again.';
+            statusDiv.className = 'form-status error';
+        }
+    } finally {
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Submit';
+        }
+    }
 });
 
 function initPortfolioSlider(){
