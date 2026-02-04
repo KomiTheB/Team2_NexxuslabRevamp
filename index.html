@@ -5,7 +5,6 @@
         <meta name="viewport" content="width=device-width,initial-scale=1.0" />
         <link rel="stylesheet" href="./style.css" />
 
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
         <link rel="stylesheet" href="https://assets.calendly.com/assets/external/widget.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css"
          integrity="sha384-b6lVK+yci+bfDmaY1u0zE8YYJt0TZxLEAFyYSLHId4xoVvsrQu3INevFKo+Xir8e" crossorigin="anonymous">
@@ -29,12 +28,6 @@
                 </div>
                 <p class="loader-text">Loading Experience...</p>
             </div>
-        </div>
-
-        <!-- Custom Cursor -->
-        <div class="custom-cursor" id="customCursor">
-            <div class="cursor-dot"></div>
-            <div class="cursor-ring"></div>
         </div>
 
         <!-- Mouse Trail Effect -->
@@ -77,6 +70,7 @@
         <nav class="main-nav" id="mainNav">
             <a href="#home">Home</a>
             <a href="#services">Services</a>
+            <a href="#video-automation">Showcase</a>
             <a href="#portfolio">Portfolio</a>
             <a href="#principle">Principle</a>
             <a href="#team">Team</a>
@@ -112,44 +106,48 @@
                 At NexxusLab, we transform ideas into interactive digital blueprints through our professional Mock-ups &amp; Prototypes service. By creating clickable, user-friendly prototypes, we help you validate concepts and identify usability gaps before you invest in full-scale development, ensuring every project is guided with clarity and precision. Our three-tiered approach ensures there is a package for every stage of growth. The Starter tier is ideal for early-stage ideas and solo founders, offering essential wireframe sketches, UI flows, and a basic clickable Figma prototype. The Growth tier suits teams refining their user experience by providing high-fidelity prototypes, user testing feedback, and annotated flow designs. For enterprises or investor-ready projects, our Scale tier delivers fully interactive prototypes, comprehensive UX audits, and a complete design system library to confidently align stakeholders and bring your vision to life efficiently.
                 </p>
                 <a href="#contact">Enquire</a>
+
+                <!-- Service Carousel -->
+                <div class="service-carousel">
+                    <button class="carousel-arrow carousel-arrow--prev" onclick="heroCarousel.prev()">
+                        <i class="bi bi-chevron-left"></i>
+                    </button>
+                    <div class="carousel-viewport">
+                        <div class="carousel-track">
+                            <a class="service-card active" href="#" data-service="service-1" onclick="heroCarousel.goTo(0); return false;">
+                                <div class="service-card__icon"><i class="bi bi-android2"></i></div>
+                                <span class="service-card__label">Mock-ups</span>
+                            </a>
+                            <a class="service-card" href="#" data-service="service-2" onclick="heroCarousel.goTo(1); return false;">
+                                <div class="service-card__icon"><i class="bi bi-code-slash"></i></div>
+                                <span class="service-card__label">Software</span>
+                            </a>
+                            <a class="service-card" href="#" data-service="service-3" onclick="heroCarousel.goTo(2); return false;">
+                                <div class="service-card__icon"><i class="bi bi-wifi"></i></div>
+                                <span class="service-card__label">Security</span>
+                            </a>
+                            <a class="service-card" href="#" data-service="service-4" onclick="heroCarousel.goTo(3); return false;">
+                                <div class="service-card__icon"><i class="bi bi-cloud"></i></div>
+                                <span class="service-card__label">Training</span>
+                            </a>
+                            <a class="service-card" href="#" data-service="service-5" onclick="heroCarousel.goTo(4); return false;">
+                                <div class="service-card__icon"><i class="bi bi-gear"></i></div>
+                                <span class="service-card__label">Automata</span>
+                            </a>
+                            <a class="service-card" href="#" data-service="service-6" onclick="heroCarousel.goTo(5); return false;">
+                                <div class="service-card__icon"><i class="bi bi-globe2"></i></div>
+                                <span class="service-card__label">AI Marketing</span>
+                            </a>
+                        </div>
+                    </div>
+                    <button class="carousel-arrow carousel-arrow--next" onclick="heroCarousel.next()">
+                        <i class="bi bi-chevron-right"></i>
+                    </button>
+                </div>
             </div>
             
             <div class="screen screen-logo">
                 <img class="screen-logo-img" src="./assets/3DNexxusLogo.gif" alt="3DNexxus Logo" />
-            </div>
-
-            <!-- Gallery Section -->
-
-            <div class="gallery">
-
-                <div class="carousel">
-                    <a class="carousel-item" href="#" onclick="changeVideo('service-1');">
-                        <div class="slide-icon" aria-hidden="true"><i class="bi bi-android2"></i></div>
-                        <h4>Mock-ups &amp; Prototypes</h4>
-                    </a>
-                    <a class="carousel-item" href="#" onclick="changeVideo('service-2');">
-                        <div class="slide-icon" aria-hidden="true"><i class="bi bi-code-slash"></i></div>
-                        <h4>Software Development</h4>
-                    </a>
-                    <a class="carousel-item" href="#" onclick="changeVideo('service-3');">
-                        <div class="slide-icon" aria-hidden="true"><i class="bi bi-wifi"></i></div>
-                        <h4>Network Security</h4>
-                    </a>
-                    <a class="carousel-item" href="#" onclick="changeVideo('service-4');">
-                        <div class="slide-icon" aria-hidden="true"><i class="bi bi-cloud"></i></div>
-                        <h4>IT Support Training</h4>
-                    </a>
-                    <a class="carousel-item" href="#" onclick="changeVideo('service-5');">
-                        <div class="slide-icon" aria-hidden="true"><i class="bi bi-gear"></i></div>
-                        <h4>Automata Development</h4>
-                    </a>
-                    <a class="carousel-item" href="#" onclick="changeVideo('service-6');">
-                        <div class="slide-icon" aria-hidden="true"><i class="bi bi-globe2"></i></div>
-                        <h4>AI Marketing Services</h4>
-                    </a>
-                </div>
-
-
             </div>
 
         </section>
@@ -277,6 +275,67 @@
                         </div>
 
                         <p class="pricing-note"><i class="bi bi-info-circle"></i> All plans include a free initial consultation. Custom packages available upon request.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Video Automation Section -->
+            <section id="video-automation" class="page-section video-automation-section">
+                <div class="section-divider">
+                    <span class="section-divider__line"></span>
+                    <span class="section-divider__icon"><i class="bi bi-play-circle"></i></span>
+                    <span class="section-divider__line"></span>
+                </div>
+                <div class="section-inner">
+                    <span class="section-badge"><i class="bi bi-camera-video"></i> Showcase</span>
+                    <h2 class="section-title glitch-text" data-text="Video Automation">Video Automation</h2>
+                    <p class="section-subtitle">Experience our work in motion — automated, dynamic, and seamless.</p>
+
+                    <div class="video-showcase">
+                        <!-- Main Video Player -->
+                        <div class="video-player-wrapper">
+                            <div class="video-player-frame">
+                                <div class="video-corner video-corner--tl"></div>
+                                <div class="video-corner video-corner--tr"></div>
+                                <div class="video-corner video-corner--bl"></div>
+                                <div class="video-corner video-corner--br"></div>
+                                
+                                <div class="video-player">
+                                    <video id="showcaseVideo" class="showcase-video" controls playsinline>
+                                        <source src="./images/Simple Automation.mov" type="video/quicktime">
+                                        <source src="./images/Simple Automation.mov" type="video/mp4">
+                                        Your browser does not support the video tag.
+                                    </video>
+                                </div>
+                                
+                                <div class="video-glow"></div>
+                            </div>
+                        </div>
+
+                        <!-- Video Title Badge -->
+                        <div class="video-title-badge">
+                            <i class="bi bi-gear-wide-connected"></i>
+                            <span>Automation in Action</span>
+                        </div>
+                    </div>
+
+                    <!-- Feature Cards -->
+                    <div class="video-features">
+                        <div class="video-feature-card">
+                            <div class="feature-icon"><i class="bi bi-lightning-charge-fill"></i></div>
+                            <h4>Instant Playback</h4>
+                            <p>Optimized for seamless streaming</p>
+                        </div>
+                        <div class="video-feature-card">
+                            <div class="feature-icon"><i class="bi bi-gear-wide-connected"></i></div>
+                            <h4>Automation</h4>
+                            <p>Streamlined workflow solutions</p>
+                        </div>
+                        <div class="video-feature-card">
+                            <div class="feature-icon"><i class="bi bi-sliders"></i></div>
+                            <h4>Full Control</h4>
+                            <p>Play, pause, and navigate freely</p>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -857,6 +916,7 @@
 
         <ul class="sci">
             <li><a href="https://www.facebook.com/nexxuslab" target="_blank" rel="noopener noreferrer"><i class="bi bi-facebook"></i></a></li>
+            <li><a href="https://www.instagram.com/nexxuslab.official/" target="_blank" rel="noopener noreferrer"><i class="bi bi-instagram"></i></a></li>
             <li><a href="https://www.linkedin.com/company/nexxus-lab/" target="_blank" rel="noopener noreferrer"><i class="bi bi-linkedin"></i></a></li>
         </ul>
         
@@ -886,6 +946,7 @@
             <p class="footer-brand__tagline">Transforming Ideas into Digital Reality</p>
             <div class="footer-social">
                 <a href="https://www.facebook.com/nexxuslab" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+                <a href="https://www.instagram.com/nexxuslab" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
                 <a href="https://www.linkedin.com/company/nexxus-lab/" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
                 <a href="mailto:team@nexxuslab.com" class="social-icon" aria-label="Email"><i class="bi bi-envelope-fill"></i></a>
             </div>

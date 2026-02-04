@@ -177,6 +177,201 @@ trailers.forEach(trailer =>{
 
 }
 
+// ========== HERO CAROUSEL CONTROLLER ==========
+const heroCarousel = (function() {
+    const services = ['service-1', 'service-2', 'service-3', 'service-4', 'service-5', 'service-6'];
+    let currentIndex = 0;
+    let autoPlayInterval = null;
+    let progressInterval = null;
+    let progressValue = 0;
+    const autoPlayDelay = 6000; // 6 seconds per slide
+    const progressStep = 50; // Update progress every 50ms
+    let isPaused = false;
+
+    function init() {
+        const carousel = document.querySelector('.service-carousel');
+        
+        if (!carousel) return;
+
+        // Add hover pause/resume functionality
+        carousel.addEventListener('mouseenter', pause);
+        carousel.addEventListener('mouseleave', resume);
+
+        // Handle window resize
+        window.addEventListener('resize', debounce(slideToCurrentIndex, 150));
+
+        // Start auto-play
+        startAutoPlay();
+
+        // Update initial state
+        updateActiveState();
+    }
+
+    // Debounce helper
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+
+    function goTo(index) {
+        if (index < 0) index = services.length - 1;
+        if (index >= services.length) index = 0;
+        
+        currentIndex = index;
+        const serviceName = services[currentIndex];
+        
+        // Use existing changeVideo function
+        changeVideo(serviceName);
+        
+        // Update carousel active state
+        updateActiveState();
+        
+        // Reset progress
+        resetProgress();
+    }
+
+    function next() {
+        goTo(currentIndex + 1);
+    }
+
+    function prev() {
+        goTo(currentIndex - 1);
+    }
+
+    function updateActiveState() {
+        // Update service cards
+        const items = document.querySelectorAll('.service-carousel .service-card');
+        items.forEach((item, index) => {
+            if (index === currentIndex) {
+                item.classList.add('active');
+            } else {
+                item.classList.remove('active');
+            }
+        });
+
+        // Slide the carousel track
+        slideToCurrentIndex();
+    }
+
+    function slideToCurrentIndex() {
+        const track = document.querySelector('.carousel-track');
+        const viewport = document.querySelector('.carousel-viewport');
+        const cards = document.querySelectorAll('.service-card');
+        
+        if (!track || !viewport || cards.length === 0) return;
+
+        const card = cards[0];
+        const cardStyle = window.getComputedStyle(card);
+        const cardWidth = card.offsetWidth;
+        const gap = parseInt(cardStyle.marginRight) || 10;
+        const cardTotalWidth = cardWidth + gap;
+
+        const viewportWidth = viewport.offsetWidth;
+        const visibleCards = Math.floor(viewportWidth / cardTotalWidth);
+        
+        // Calculate the offset to center the active card or slide appropriately
+        let offset = 0;
+        
+        if (currentIndex >= visibleCards) {
+            // Slide to show the current card
+            offset = (currentIndex - visibleCards + 1) * cardTotalWidth;
+        }
+        
+        // Make sure we don't scroll past the end
+        const maxOffset = (cards.length * cardTotalWidth) - viewportWidth;
+        offset = Math.min(offset, Math.max(0, maxOffset));
+
+        track.style.transform = `translateX(-${offset}px)`;
+    }
+
+    function startAutoPlay() {
+        stopAutoPlay();
+        
+        autoPlayInterval = setInterval(() => {
+            if (!isPaused) {
+                next();
+            }
+        }, autoPlayDelay);
+    }
+
+    function stopAutoPlay() {
+        if (autoPlayInterval) {
+            clearInterval(autoPlayInterval);
+            autoPlayInterval = null;
+        }
+        stopProgress();
+    }
+
+    function startProgress() {
+        stopProgress();
+        progressValue = 0;
+        
+        const progressBar = document.getElementById('carouselProgress');
+        if (!progressBar) return;
+
+        progressInterval = setInterval(() => {
+            if (!isPaused) {
+                progressValue += (progressStep / autoPlayDelay) * 100;
+                if (progressValue > 100) progressValue = 100;
+                progressBar.style.width = progressValue + '%';
+            }
+        }, progressStep);
+    }
+
+    function stopProgress() {
+        if (progressInterval) {
+            clearInterval(progressInterval);
+            progressInterval = null;
+        }
+    }
+
+    function resetProgress() {
+        progressValue = 0;
+        const progressBar = document.getElementById('carouselProgress');
+        if (progressBar) {
+            progressBar.style.transition = 'none';
+            progressBar.style.width = '0%';
+            // Force reflow
+            progressBar.offsetHeight;
+            progressBar.style.transition = 'width 0.1s linear';
+        }
+        
+        // Restart auto-play timer
+        startAutoPlay();
+    }
+
+    function pause() {
+        isPaused = true;
+    }
+
+    function resume() {
+        isPaused = false;
+    }
+
+    // Initialize when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+
+    // Public API
+    return {
+        goTo,
+        next,
+        prev,
+        pause,
+        resume
+    };
+})();
+
 document.addEventListener('submit', async (event) => {
     const form = event.target;
     if (!(form instanceof HTMLFormElement)) return;
@@ -1207,12 +1402,14 @@ function initChatbot(){
 
     function openChat(){
         panel.hidden = false;
+        panel.removeAttribute('hidden');
         launch.setAttribute('aria-expanded', 'true');
         window.setTimeout(() => input.focus(), 0);
     }
 
     function closeChat(){
         panel.hidden = true;
+        panel.setAttribute('hidden', '');
         launch.setAttribute('aria-expanded', 'false');
         launch.focus();
     }
@@ -1242,8 +1439,18 @@ function initChatbot(){
     }
 
     launch.addEventListener('click', toggleChat);
-    closeBtn?.addEventListener('click', closeChat);
-    resetBtn?.addEventListener('click', resetChat);
+    
+    if (closeBtn) {
+        closeBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            closeChat();
+        });
+    }
+    
+    if (resetBtn) {
+        resetBtn.addEventListener('click', resetChat);
+    }
 
     document.addEventListener('keydown', (event) => {
         if (event.key === 'Escape' && !panel.hidden) closeChat();
@@ -1261,6 +1468,11 @@ function initChatbot(){
         event.preventDefault();
         sendUserMessage(input.value);
     });
+
+    // Ensure panel is hidden on load
+    panel.hidden = true;
+    panel.setAttribute('hidden', '');
+    launch.setAttribute('aria-expanded', 'false');
 
     renderHistory();
     ensureGreeting();
@@ -1479,6 +1691,13 @@ function initLoadingScreen() {
 
 // ========== CUSTOM CURSOR ==========
 function initCustomCursor() {
+    // Skip on touch devices or small screens
+    if (window.matchMedia('(max-width: 1024px)').matches || 
+        window.matchMedia('(hover: none)').matches ||
+        window.matchMedia('(pointer: coarse)').matches) {
+        return;
+    }
+    
     const cursor = document.getElementById('customCursor');
     if (!cursor) return;
     
@@ -1489,62 +1708,101 @@ function initCustomCursor() {
     
     let mouseX = 0, mouseY = 0;
     let ringX = 0, ringY = 0;
+    let isVisible = true;
     
-    // Portfolio section - hide cursor when hovering
+    // Portfolio section detection
     const portfolioSection = document.getElementById('portfolio');
     
-    document.addEventListener('mousemove', (e) => {
+    // Update cursor position
+    const updateCursor = (e) => {
         mouseX = e.clientX;
         mouseY = e.clientY;
         
+        // Direct dot positioning for responsiveness
         dot.style.left = mouseX + 'px';
         dot.style.top = mouseY + 'px';
         
-        // Check if mouse is over portfolio section
+        // Check if over portfolio section
         if (portfolioSection) {
             const rect = portfolioSection.getBoundingClientRect();
-            const isOverPortfolio = e.clientY >= rect.top && e.clientY <= rect.bottom;
+            const overPortfolio = mouseY >= rect.top && mouseY <= rect.bottom;
             
-            if (isOverPortfolio) {
-                cursor.style.opacity = '0';
-                cursor.style.visibility = 'hidden';
-            } else {
-                cursor.style.opacity = '1';
-                cursor.style.visibility = 'visible';
+            if (overPortfolio && isVisible) {
+                isVisible = false;
+                document.body.classList.add('cursor-hidden');
+            } else if (!overPortfolio && !isVisible) {
+                isVisible = true;
+                document.body.classList.remove('cursor-hidden');
             }
         }
-    });
+    };
     
-    // Smooth ring follow
-    function animateRing() {
-        ringX += (mouseX - ringX) * 0.15;
-        ringY += (mouseY - ringY) * 0.15;
+    document.addEventListener('mousemove', updateCursor, { passive: true });
+    
+    // Smooth ring follow with RAF
+    let rafId;
+    const animateRing = () => {
+        const ease = 0.18;
+        ringX += (mouseX - ringX) * ease;
+        ringY += (mouseY - ringY) * ease;
         
         ring.style.left = ringX + 'px';
         ring.style.top = ringY + 'px';
         
-        requestAnimationFrame(animateRing);
-    }
+        rafId = requestAnimationFrame(animateRing);
+    };
     animateRing();
     
-    // Hover effect on interactive elements (exclude portfolio)
-    const interactiveElements = document.querySelectorAll('a:not(#portfolio a), button:not(#portfolio button), .info-card, .team-reveal, input, textarea');
-    
-    interactiveElements.forEach(el => {
-        el.addEventListener('mouseenter', () => {
-            document.body.classList.add('cursor-hover');
+    // Hover effects for interactive elements
+    const addHoverListeners = () => {
+        const interactiveSelectors = [
+            'a:not(#portfolio a)',
+            'button:not(#portfolio button)',
+            '.info-card',
+            '.team-reveal',
+            '.carousel-item',
+            'input',
+            'textarea',
+            '.header-cta',
+            '.menu-btn'
+        ].join(', ');
+        
+        const elements = document.querySelectorAll(interactiveSelectors);
+        
+        elements.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                document.body.classList.add('cursor-hover');
+            }, { passive: true });
+            
+            el.addEventListener('mouseleave', () => {
+                document.body.classList.remove('cursor-hover');
+            }, { passive: true });
         });
-        el.addEventListener('mouseleave', () => {
-            document.body.classList.remove('cursor-hover');
-        });
-    });
+    };
     
-    // Click effect
+    addHoverListeners();
+    
+    // Click effects
     document.addEventListener('mousedown', () => {
         document.body.classList.add('cursor-click');
-    });
+    }, { passive: true });
+    
     document.addEventListener('mouseup', () => {
         document.body.classList.remove('cursor-click');
+    }, { passive: true });
+    
+    // Hide cursor when leaving window
+    document.addEventListener('mouseleave', () => {
+        cursor.style.opacity = '0';
+    }, { passive: true });
+    
+    document.addEventListener('mouseenter', () => {
+        cursor.style.opacity = '1';
+    }, { passive: true });
+    
+    // Cleanup on page unload
+    window.addEventListener('beforeunload', () => {
+        if (rafId) cancelAnimationFrame(rafId);
     });
 }
 
@@ -1882,6 +2140,214 @@ function initTextSplit() {
         });
     });
 }
+
+// ========== VIDEO AUTOMATION CONTROLLER ==========
+const videoAutomation = (function() {
+    let video = null;
+    let playPauseBtn = null;
+    let muteBtn = null;
+    let fullscreenBtn = null;
+    let videoOverlay = null;
+    let videoPlayBtn = null;
+    let progressBar = null;
+    let progressContainer = null;
+    let timeDisplay = null;
+    let thumbnails = [];
+    let autoplayToggle = null;
+    let currentIndex = 0;
+    let isInitialized = false;
+
+    const videoSources = [
+        './assets/mclaren-1.mp4',
+        './assets/mclaren-2.mp4',
+        './assets/mclaren-3.mp4',
+        './assets/mclaren-4.mp4',
+        './assets/mclaren-5.mp4'
+    ];
+
+    function init() {
+        if (isInitialized) return;
+        
+        video = document.getElementById('showcaseVideo');
+        playPauseBtn = document.getElementById('playPauseBtn');
+        muteBtn = document.getElementById('muteBtn');
+        fullscreenBtn = document.getElementById('fullscreenBtn');
+        videoOverlay = document.getElementById('videoOverlay');
+        videoPlayBtn = document.getElementById('videoPlayBtn');
+        progressBar = document.getElementById('videoProgressBar');
+        progressContainer = document.getElementById('videoProgress');
+        timeDisplay = document.getElementById('videoTime');
+        thumbnails = document.querySelectorAll('.video-thumbnail');
+        autoplayToggle = document.getElementById('autoplayToggle');
+
+        if (!video) return;
+
+        isInitialized = true;
+
+        // Event Listeners
+        if (videoPlayBtn) {
+            videoPlayBtn.addEventListener('click', handlePlayClick);
+        }
+
+        if (videoOverlay) {
+            videoOverlay.addEventListener('click', handlePlayClick);
+        }
+
+        if (playPauseBtn) {
+            playPauseBtn.addEventListener('click', togglePlay);
+        }
+
+        if (muteBtn) {
+            muteBtn.addEventListener('click', toggleMute);
+        }
+
+        if (fullscreenBtn) {
+            fullscreenBtn.addEventListener('click', toggleFullscreen);
+        }
+
+        if (progressContainer) {
+            progressContainer.addEventListener('click', seekVideo);
+        }
+
+        video.addEventListener('timeupdate', updateProgress);
+        video.addEventListener('ended', handleVideoEnd);
+        video.addEventListener('loadedmetadata', updateTimeDisplay);
+        video.addEventListener('play', updatePlayPauseIcon);
+        video.addEventListener('pause', updatePlayPauseIcon);
+
+        thumbnails.forEach((thumb, index) => {
+            thumb.addEventListener('click', () => selectVideo(index));
+        });
+
+        // Initial state
+        updatePlayPauseIcon();
+    }
+
+    function handlePlayClick(e) {
+        e.stopPropagation();
+        if (videoOverlay) {
+            videoOverlay.classList.add('hidden');
+        }
+        video.play();
+    }
+
+    function togglePlay() {
+        if (video.paused) {
+            video.play();
+            if (videoOverlay) videoOverlay.classList.add('hidden');
+        } else {
+            video.pause();
+        }
+    }
+
+    function updatePlayPauseIcon() {
+        if (!playPauseBtn) return;
+        const icon = playPauseBtn.querySelector('i');
+        if (video.paused) {
+            icon.className = 'bi bi-play-fill';
+        } else {
+            icon.className = 'bi bi-pause-fill';
+        }
+    }
+
+    function toggleMute() {
+        video.muted = !video.muted;
+        if (!muteBtn) return;
+        const icon = muteBtn.querySelector('i');
+        if (video.muted) {
+            icon.className = 'bi bi-volume-mute-fill';
+        } else {
+            icon.className = 'bi bi-volume-up-fill';
+        }
+    }
+
+    function toggleFullscreen() {
+        const player = document.querySelector('.video-player');
+        if (!player) return;
+
+        if (document.fullscreenElement) {
+            document.exitFullscreen();
+        } else {
+            player.requestFullscreen();
+        }
+    }
+
+    function updateProgress() {
+        if (!progressBar || !video.duration) return;
+        const percent = (video.currentTime / video.duration) * 100;
+        progressBar.style.width = percent + '%';
+        updateTimeDisplay();
+    }
+
+    function updateTimeDisplay() {
+        if (!timeDisplay || !video.duration) return;
+        const current = formatTime(video.currentTime);
+        const duration = formatTime(video.duration);
+        timeDisplay.textContent = `${current} / ${duration}`;
+    }
+
+    function formatTime(seconds) {
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return `${mins}:${secs.toString().padStart(2, '0')}`;
+    }
+
+    function seekVideo(e) {
+        if (!progressContainer || !video.duration) return;
+        const rect = progressContainer.getBoundingClientRect();
+        const percent = (e.clientX - rect.left) / rect.width;
+        video.currentTime = percent * video.duration;
+    }
+
+    function handleVideoEnd() {
+        if (autoplayToggle && autoplayToggle.checked) {
+            // Auto-play next video
+            const nextIndex = (currentIndex + 1) % videoSources.length;
+            selectVideo(nextIndex);
+            video.play();
+        } else {
+            // Show overlay again
+            if (videoOverlay) videoOverlay.classList.remove('hidden');
+        }
+    }
+
+    function selectVideo(index) {
+        currentIndex = index;
+        const src = videoSources[index];
+        
+        if (video) {
+            video.src = src;
+            video.load();
+        }
+
+        // Update thumbnail active state
+        thumbnails.forEach((thumb, i) => {
+            if (i === index) {
+                thumb.classList.add('active');
+            } else {
+                thumb.classList.remove('active');
+            }
+        });
+
+        // Reset overlay
+        if (videoOverlay) {
+            videoOverlay.classList.remove('hidden');
+        }
+    }
+
+    // Initialize when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+
+    return {
+        init,
+        selectVideo,
+        togglePlay
+    };
+})();
 
 // ========== PARALLAX MOUSE EFFECT ==========
 function initParallaxMouse() {
